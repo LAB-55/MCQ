@@ -38,7 +38,7 @@
 		</tr>
 	@endforeach
 </table>
-
+<p style="page-break-before: always">
 @if ($type == "withanswer")
 	<h2>Answer:</h2>
 	<table>

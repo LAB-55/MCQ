@@ -10,15 +10,6 @@ use Hash;
   ini_set('max_execution_time', -1);
 class MCQController extends Controller
 {
-    public function get_index( $char ){
-        switch ($char) {
-            case 'A': return 3;
-            case 'B': return 4;
-            case 'C': return 5;
-            case 'D': return 6;
-
-        }
-    }
     public function index() {
     	return view('mcqform');
     }
@@ -39,11 +30,21 @@ class MCQController extends Controller
     	view()->share('type', $type);
         PDF::loadView('mcq')->save(public_path().'/pdf/'.$name);
         
-        die($name);
+        return $name;
         //$pdf = PDF::loadView('mcq');
         //return $pdf->download($name); 
     }
 
+    /* Database Insert */
+    public function get_index( $char ){
+        switch ($char) {
+            case 'A': return 3;
+            case 'B': return 4;
+            case 'C': return 5;
+            case 'D': return 6;
+
+        }
+    }
     public function test()
     {
         $i = 0;
@@ -73,4 +74,5 @@ class MCQController extends Controller
         fclose($handle);
         }
     }
+    /*End - Database Insert */
 }
