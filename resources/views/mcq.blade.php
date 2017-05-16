@@ -41,12 +41,15 @@
 
 @if ($type == "withanswer")
 	<h2>Answer:</h2>
-	<table border="1" cellspacing="0" cellpadding="2">
-		<tr>
-			<?php $id = 0;?>
-			@foreach ($option as $o)
-				<td style="width: 60px!important;"><strong>{{++$id}}. </strong><?php echo $o ?></td>
-			@endforeach
-		</tr>
+	<table>
+	<tr>
+		<?php $id = 0; ?>
+		@foreach ($option as $o)
+					<td style="width: 60px!important;border:1px solid black;"><strong>{{++$id}}. </strong><?php echo $o ?></td>
+				@if( $id % 10 == 0 ) 
+					</tr><tr>
+				@endif
+		@endforeach
+	</tr>
 	</table>
 @endif

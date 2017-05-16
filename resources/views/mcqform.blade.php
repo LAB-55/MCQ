@@ -2,11 +2,11 @@
 	{{ csrf_field() }}
 	<select name="mcq_no" required>
 		<option>Select Option</option>
-		<option name="1" value="1">1</option>
-		<option name="2" value="2">2</option>
-		<option name="3" value="3">3</option>
-		<option name="4" value="4">4</option>
-		<option name="5" value="5">5</option>
+		<option name="1" value="10">10</option>
+		<option name="2" value="25">25</option>
+		<option name="3" value="50">50</option>
+		<option name="4" value="70">70</option>
+		<option name="5" value="100">100</option>
 	</select>
 
 	<select name="type" required>

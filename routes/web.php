@@ -18,3 +18,5 @@
 Route::get('/', 'MCQController@index');
 
 Route::post('/', 'MCQController@create');
+
+// Route::get('/test', 'MCQController@test');
