@@ -17,6 +17,8 @@
 
 Route::get('/', 'MCQController@index');
 
+Route::get('/getmodulelist/{subjectid}','MCQController@getModuleList');
+
 Route::post('/', 'MCQController@create');
 
 // Route::get('/test', 'MCQController@test');

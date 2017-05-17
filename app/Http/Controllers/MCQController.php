@@ -3,31 +3,70 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\MCQ;
+use App\Subject_Id;
+use App\Module_Id;
 use PDF;
 use Redirect;
-use Hash;
-  ini_set('max_execution_time', -1);
+
+// ini_set('max_execution_time', -1);
+
 class MCQController extends Controller
 {
     public function index() {
-    	return view('mcqform');
+    	
+        $subject = Subject_Id::Select('*')->get();
+
+        
+
+        return view('mcqform', ['subject' => $subject]);
+    }
+
+    public function getModuleList($subjectid){
+        $module = Module_Id::select('*')
+                    ->where("subjectid",$subjectid)->get();
+        // print_r($series_id);
+            // sleep(2);
+        // exit();
+        return response()->json($module);
     }
 
     public function create(Request $request)
     {
-    	$mcq_no = $request->mcq_no;
+    	$total_mcq_no = $request->total_mcq_no;
     	$type = $request->type;
+        $subjectid = $request->subject;
+        $moduleid = $request->module;
 
-    	$que = MCQ::Select("*")->limit($mcq_no)->inRandomOrder()->get();
+        // Creating Array of Subject Data
+        $subjectid = $request->get('subject');
+
+        // Creating Array of Module Data
+        $moduleid = $request->get('module');
+
+        // Creating Array of No. of MCQ Data
+        $mcqno = $request->get('mcqno');
+
+        //echo "<pre>"; print_r($subjectid); print_r($moduleid); print_r($mcqno); exit();
+
+        //Create Empty Collection
+        $que = Collection::make();
+
+        foreach ($subjectid as $key => $value) {
+            $result[$key] = MCQ::Select("*")->where("subjectid",$subjectid[$key])->limit($mcqno[$key])->inRandomOrder()->get(); 
+            $que = $que->merge($result[$key]);           
+        }
+
+    	//$que = MCQ::Select("*")->where("subjectid",$subjectid)->where("moduleid",$moduleid)->limit($total_mcq_no)->inRandomOrder()->get();
         //return view('mcq', ['que' => $que], ['type' => $type]);
-        $name = sha1( time()).rand(10000,99999).".pdf";
-        // echo "<pre>";
-        // print_r($name);
+        //  echo "<pre>"; print_r($que); 
         // exit();
 
     	view()->share('que', $que);
     	view()->share('type', $type);
+        
+        $name = sha1( time()).rand(10000,99999).".pdf";
         PDF::loadView('mcq')->save(public_path().'/pdf/'.$name);
         
         return $name;
