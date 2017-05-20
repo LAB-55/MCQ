@@ -34,6 +34,8 @@ class MCQController extends Controller
 
     public function create(Request $request)
     {
+        $date = date('d-m-Y');
+        $institute_name = $request->institute_name;
     	$total_mcq_no = $request->total_mcq_no;
     	$type = $request->type;
         $subjectid = $request->subject;
@@ -42,8 +44,21 @@ class MCQController extends Controller
         // Creating Array of Subject Data
         $subjectid = $request->get('subject');
 
+        $subject = Collection::make();
+        foreach ($subjectid as $key => $value) {
+            $result[$key] = Subject_Id::Select('*')->where('subjectid',$subjectid[$key])->get();
+            $subject = $subject->merge($result[$key]);           
+        }
+
+
         // Creating Array of Module Data
         $moduleid = $request->get('module');
+
+        $module = Collection::make();
+        foreach ($moduleid as $key => $value) {
+            $result[$key] = Module_Id::Select('*')->where('moduleid',$moduleid[$key])->where('subjectid',$subjectid[$key])->get();
+            $module = $module->merge($result[$key]);           
+        }
 
         // Creating Array of No. of MCQ Data
         $mcqno = $request->get('mcqno');
@@ -54,17 +69,32 @@ class MCQController extends Controller
         $que = Collection::make();
 
         foreach ($subjectid as $key => $value) {
-            $result[$key] = MCQ::Select("*")->where("subjectid",$subjectid[$key])->limit($mcqno[$key])->inRandomOrder()->get(); 
+            $result[$key] = MCQ::Select('*')->where('subjectid',$subjectid[$key])->limit($mcqno[$key])->inRandomOrder()->get(); 
             $que = $que->merge($result[$key]);           
         }
 
     	//$que = MCQ::Select("*")->where("subjectid",$subjectid)->where("moduleid",$moduleid)->limit($total_mcq_no)->inRandomOrder()->get();
-        //return view('mcq', ['que' => $que], ['type' => $type]);
-        //  echo "<pre>"; print_r($que); 
+        // return view('mcq')->with('institute_name', $institute_name)
+        //                 ->with('subject', $subject)
+        //                 ->with('date', $date)
+        //                 ->with('module', $module)
+        //                 ->with('total_mcq_no', $total_mcq_no)
+        //                 ->with('que', $que)
+        //                 ->with('type', $type);
+        
+        //return view('mcq',  ['subject' => $subject], ['date' => $date], ['module' => $module], ['total_mcq_no' => $total_mcq_no], ['que' => $que], ['type' => $type]);        
+
+        // echo "<pre>"; print_r($subject); 
         // exit();
 
-    	view()->share('que', $que);
-    	view()->share('type', $type);
+        view()->share('institute_name', $institute_name);
+        view()->share('subject', $subject);
+        view()->share('date', $date);
+        view()->share('module', $module);
+        view()->share('total_mcq_no', $total_mcq_no);
+
+        view()->share('que', $que);
+        view()->share('type', $type);
         
         $name = sha1( time()).rand(10000,99999).".pdf";
         PDF::loadView('mcq')->save(public_path().'/pdf/'.$name);

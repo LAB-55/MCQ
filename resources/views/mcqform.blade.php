@@ -31,6 +31,11 @@
 			{{ csrf_field() }}
 			
 			<div class="form-group">
+				<label>Institute Name : </label>
+				<input class="form-control" type="text" id="institute_name" name="institute_name" placeholder="FABLAB" required>
+			</div>
+
+			<div class="form-group">
 				<label>Total MCQ : </label>
 				<input class="form-control" type="number" id="total_mcq_no" name="total_mcq_no" placeholder="100" required>
 			</div>
@@ -66,7 +71,7 @@
 
 					<div class="form-group">
 						<label>No. of MCQ : </label>
-						<input class="form-control" type="number" id="mcqno" name="mcqno[]" placeholder="100" required>
+						<input class="form-control" type="number" name="mcqno[]" placeholder="100" required>
 					</div>
 
 					<button class='btn mcq-delete btn-danger' type="button" onclick='del_parent(this)'><i class='fa fa-trash'></i></button>

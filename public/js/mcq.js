@@ -3,7 +3,7 @@ var subjectid = $(this).val();
 // console.log(subject_id)    
 if(subjectid.length>0){
 	$.get("/getmodulelist/"+subjectid , function( d ){
-		$("#module").empty();
+		$('#module').empty();
 		$.each(d,function(k, module){
 			// console.log(module);
 			var opt = $('<option>',{
@@ -12,13 +12,16 @@ if(subjectid.length>0){
 					});
 			$('#module').append( opt );
 		});
-		$("#module").removeAttr("disabled");
+		$('#module').removeAttr("disabled");
 
 	});
 }else{
-    $("#module").empty();
+    $('#module').empty();
 }      
 });
+
+
+
 
 function del_parent( btn ){
 	$(btn).closest('.mcqtype').remove();
